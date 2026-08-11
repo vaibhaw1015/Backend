@@ -13,7 +13,9 @@ dotenv.config({ path: path.resolve(__dirname, '../.env.test') });
 beforeAll(() => {
   // We expect DATABASE_URL to point to a test database here
   if (!process.env.DATABASE_URL?.includes('test') && !process.env.CI) {
-    console.warn("WARNING: DATABASE_URL doesn't seem to point to a test database.");
+    console.error("CRITICAL ERROR: DATABASE_URL doesn't seem to point to a test database.");
+    console.error("To protect your production data, tests have been aborted.");
+    process.exit(1);
   }
   
   // Apply migrations to the test database
