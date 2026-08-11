@@ -176,13 +176,13 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
   const statusBadgeStyle = (status: string) => {
     switch (status) {
       case 'CONFIRMED':
-        return 'text-emerald-400 bg-emerald-950/30 border-emerald-900/30';
+        return 'text-emerald-700 bg-emerald-100 border-emerald-200';
       case 'DRAFT':
-        return 'text-amber-400 bg-amber-950/30 border-amber-900/30';
+        return 'text-amber-700 bg-amber-100 border-amber-200';
       case 'CANCELLED':
-        return 'text-rose-400 bg-rose-950/30 border-rose-900/30';
+        return 'text-rose-700 bg-rose-100 border-rose-200';
       default:
-        return 'text-slate-400 bg-slate-800';
+        return 'text-slate-500 bg-slate-100 border-slate-200';
     }
   };
 
@@ -197,25 +197,25 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
   }, 0);
 
   return (
-    <div className="flex-1 flex h-screen bg-slate-950 text-slate-100 overflow-hidden">
+    <div className="flex-1 flex h-screen bg-slate-50 text-slate-900 overflow-hidden">
       
       {/* Left Column: Challans List */}
-      <div className="flex-1 flex flex-col p-8 border-r border-slate-900 overflow-y-auto space-y-6">
+      <div className="flex-1 flex flex-col p-8 border-r border-slate-200 overflow-y-auto space-y-6">
         
         {/* Module Header */}
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
           <div>
-            <h2 className="text-xl font-extrabold text-white flex items-center space-x-2">
-              <FileText className="w-6 h-6 text-sky-400" />
+            <h2 className="text-xl font-extrabold text-slate-900 flex items-center space-x-2">
+              <FileText className="w-6 h-6 text-blue-500" />
               <span>Sales Challan Ledger</span>
             </h2>
-            <p className="text-xs text-slate-400 mt-1">Generate distribution challans, apply inventory stock locks, print invoices</p>
+            <p className="text-sm text-slate-500 mt-1">Generate distribution challans, apply inventory stock locks, print invoices</p>
           </div>
 
           {isSalesOrAdmin && (
             <button
               onClick={() => setShowAddModal(true)}
-              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-sky-500 to-blue-600 hover:from-sky-400 hover:to-blue-500 text-white rounded-xl text-xs font-semibold shadow-lg shadow-sky-500/10 active:scale-[0.98] transition cursor-pointer"
+              className="flex items-center space-x-2 px-4 py-2 bg-gradient-to-r from-blue-500 to-indigo-600 hover:from-blue-600 hover:to-indigo-700 text-white rounded-xl text-sm font-semibold shadow-md active:scale-[0.98] transition cursor-pointer"
             >
               <Plus className="w-4 h-4" />
               <span>Create Challan</span>
@@ -229,10 +229,10 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
             <button
               key={st}
               onClick={() => setStatusFilter(st)}
-              className={`px-3 py-1.5 rounded-lg text-xs font-semibold border transition cursor-pointer ${
+              className={`px-3 py-1.5 rounded-lg text-sm font-semibold border transition cursor-pointer ${
                 statusFilter === st 
-                  ? 'bg-slate-800 text-sky-400 border-slate-700' 
-                  : 'text-slate-450 hover:bg-slate-900 border-slate-900'
+                  ? 'bg-blue-50 border-blue-200 text-blue-600' 
+                  : 'text-slate-500 hover:bg-slate-50 border-slate-200 bg-white shadow-sm'
               }`}
             >
               {st === '' ? 'All Invoices' : st}
@@ -241,20 +241,20 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
         </div>
 
         {/* Invoices List Ledger */}
-        <div className="flex-1 bg-slate-900/40 border border-slate-800 rounded-2xl overflow-hidden min-h-[300px]">
+        <div className="flex-1 bg-white border border-slate-200 rounded-2xl overflow-hidden min-h-[300px] shadow-sm">
           {loading && challans.length === 0 ? (
-            <div className="h-full flex items-center justify-center text-xs text-slate-500">
+            <div className="h-full flex items-center justify-center text-sm text-slate-500">
               Loading ledger...
             </div>
           ) : challans.length === 0 ? (
-            <div className="h-full flex items-center justify-center text-xs text-slate-500">
+            <div className="h-full flex items-center justify-center text-sm text-slate-500">
               No challans found.
             </div>
           ) : (
             <div className="overflow-x-auto">
-              <table className="w-full text-left text-xs border-collapse">
+              <table className="w-full text-left text-sm border-collapse">
                 <thead>
-                  <tr className="bg-slate-900 text-slate-400 border-b border-slate-800/80">
+                  <tr className="bg-slate-50 text-slate-500 border-b border-slate-200">
                     <th className="p-4 font-semibold">Challan Number</th>
                     <th className="p-4 font-semibold">Client Name</th>
                     <th className="p-4 font-semibold">Created Date</th>
@@ -262,24 +262,24 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
                     <th className="p-4 font-semibold">Status</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-850">
+                <tbody className="divide-y divide-slate-100">
                   {challans.map((c) => (
                     <tr 
                       key={c.id} 
                       onClick={() => fetchChallanDetails(c.id)}
-                      className={`hover:bg-slate-800/30 cursor-pointer transition ${
-                        selectedChal?.id === c.id ? 'bg-slate-800/40 border-l-2 border-l-sky-500' : ''
+                      className={`hover:bg-slate-50 cursor-pointer transition ${
+                        selectedChal?.id === c.id ? 'bg-blue-50/50 border-l-2 border-l-blue-500' : ''
                       }`}
                     >
-                      <td className="p-4 font-mono font-bold text-sky-400">{c.challanNumber}</td>
+                      <td className="p-4 font-mono font-bold text-blue-500">{c.challanNumber}</td>
                       <td className="p-4">
-                        <p className="font-bold text-slate-200">{c.customer?.businessName}</p>
-                        <p className="text-[9px] text-slate-500 mt-0.5">{c.customer?.name}</p>
+                        <p className="font-bold text-slate-900">{c.customer?.businessName}</p>
+                        <p className="text-[10px] text-slate-500 mt-0.5">{c.customer?.name}</p>
                       </td>
-                      <td className="p-4 text-slate-450">{new Date(c.createdAt).toLocaleDateString()}</td>
-                      <td className="p-4 text-slate-300 font-semibold">{c.totalQuantity} units</td>
+                      <td className="p-4 text-slate-600">{new Date(c.createdAt).toLocaleDateString()}</td>
+                      <td className="p-4 text-slate-700 font-semibold">{c.totalQuantity} units</td>
                       <td className="p-4">
-                        <span className={`px-2 py-0.5 rounded-full text-[9px] font-bold tracking-wide uppercase border ${statusBadgeStyle(c.status)}`}>
+                        <span className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase border ${statusBadgeStyle(c.status)}`}>
                           {c.status}
                         </span>
                       </td>
@@ -293,78 +293,78 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
       </div>
 
       {/* Right Column: Challan detail receipt/invoice */}
-      <div id="printable-challan" className="w-96 bg-slate-900/60 border-l border-slate-850 flex flex-col h-screen overflow-y-auto print:fixed print:inset-0 print:z-50 print:bg-white print:text-black print:w-full print:h-full">
+      <div id="printable-challan" className="w-96 bg-white border-l border-slate-200 flex flex-col h-screen overflow-y-auto shadow-sm print:fixed print:inset-0 print:z-50 print:bg-white print:text-black print:w-full print:h-full">
         {selectedChal ? (
           <div className="flex-1 flex flex-col justify-between h-full">
             
             {/* Header info */}
-            <div className="p-6 border-b border-slate-800 space-y-4 print:border-b-2 print:border-black">
+            <div className="p-6 border-b border-slate-200 space-y-4 print:border-b-2 print:border-black">
               <div className="flex justify-between items-start print:hidden">
-                <span className={`px-2.5 py-0.5 rounded-full text-[9px] font-bold tracking-wide uppercase border ${statusBadgeStyle(selectedChal.status)}`}>
+                <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-bold tracking-wide uppercase border ${statusBadgeStyle(selectedChal.status)}`}>
                   {selectedChal.status}
                 </span>
 
                 <div className="flex items-center space-x-1">
                   <button 
                     onClick={handlePrint}
-                    className="p-1.5 hover:bg-slate-800 border border-slate-800 text-slate-400 hover:text-white rounded-lg transition cursor-pointer flex items-center space-x-1"
+                    className="p-1.5 hover:bg-slate-50 border border-slate-200 text-slate-500 hover:text-slate-700 rounded-lg transition cursor-pointer flex items-center space-x-1"
                   >
                     <Printer className="w-3.5 h-3.5" />
-                    <span className="text-[9px] font-bold">Print</span>
+                    <span className="text-[10px] font-bold">Print</span>
                   </button>
                 </div>
               </div>
 
               {/* Invoice Brand header */}
               <div className="space-y-1">
-                <h3 className="font-mono text-xs text-slate-500 uppercase tracking-widest print:text-slate-600">Distribution Challan</h3>
-                <h2 className="font-black text-xl text-sky-400 font-mono print:text-black">{selectedChal.challanNumber}</h2>
-                <div className="flex items-center space-x-2 text-[10px] text-slate-500 mt-1">
+                <h3 className="font-mono text-sm text-slate-500 uppercase tracking-widest print:text-slate-600">Distribution Challan</h3>
+                <h2 className="font-black text-xl text-blue-500 font-mono print:text-black">{selectedChal.challanNumber}</h2>
+                <div className="flex items-center space-x-2 text-xs text-slate-500 mt-1">
                   <Calendar className="w-3.5 h-3.5" />
                   <span>{new Date(selectedChal.createdAt).toLocaleString()}</span>
                 </div>
               </div>
 
               {/* Customer and Issuer details */}
-              <div className="p-4 bg-slate-950/60 border border-slate-850 rounded-2xl space-y-2 print:bg-slate-100 print:text-black print:border-black">
+              <div className="p-4 bg-slate-50/80 border border-slate-200 rounded-2xl space-y-2 print:bg-slate-100 print:text-black print:border-black">
                 <div>
-                  <p className="text-[9px] text-slate-500 uppercase font-bold print:text-slate-600">Client / Consignee</p>
-                  <p className="text-xs font-bold text-slate-200 mt-0.5 print:text-black">{selectedChal.customer?.businessName}</p>
-                  <p className="text-[10px] text-slate-400 print:text-slate-600">{selectedChal.customer?.name} • {selectedChal.customer?.address}</p>
+                  <p className="text-[10px] text-slate-500 uppercase font-bold print:text-slate-600">Client / Consignee</p>
+                  <p className="text-sm font-bold text-slate-900 mt-0.5 print:text-black">{selectedChal.customer?.businessName}</p>
+                  <p className="text-xs text-slate-500 print:text-slate-600">{selectedChal.customer?.name} • {selectedChal.customer?.address}</p>
                   {selectedChal.customer?.gstNumber && (
-                    <p className="text-[9px] font-mono text-sky-400 mt-0.5 print:text-slate-700">GSTIN: {selectedChal.customer.gstNumber}</p>
+                    <p className="text-[10px] font-mono text-blue-500 mt-0.5 print:text-slate-700">GSTIN: {selectedChal.customer.gstNumber}</p>
                   )}
                 </div>
-                <div className="border-t border-slate-850/80 pt-2 print:border-black">
-                  <p className="text-[9px] text-slate-500 uppercase font-bold print:text-slate-600">Issuer / Sales Rep</p>
-                  <p className="text-[10px] font-semibold text-slate-300 mt-0.5 print:text-black">{selectedChal.createdBy}</p>
+                <div className="border-t border-slate-200 pt-2 print:border-black">
+                  <p className="text-[10px] text-slate-500 uppercase font-bold print:text-slate-600">Issuer / Sales Rep</p>
+                  <p className="text-xs font-semibold text-slate-700 mt-0.5 print:text-black">{selectedChal.createdBy}</p>
                 </div>
               </div>
             </div>
 
             {/* Snapshot Items table */}
             <div className="flex-1 p-6 space-y-4 overflow-y-auto">
-              <p className="text-[10px] text-slate-500 font-bold uppercase tracking-widest">Transaction Items Snapshot</p>
+              <p className="text-xs text-slate-500 font-bold uppercase tracking-widest">Transaction Items Snapshot</p>
               
-              <table className="w-full text-left text-xs border-collapse">
+              <table className="w-full text-left text-sm border-collapse">
                 <thead>
-                  <tr className="text-slate-500 border-b border-slate-850 pb-2 print:border-black print:text-black">
+                  <tr className="text-slate-500 border-b border-slate-200 pb-2 print:border-black print:text-black">
                     <th className="pb-2 font-semibold">SKU & Item</th>
                     <th className="pb-2 font-semibold text-right">Price</th>
                     <th className="pb-2 font-semibold text-right">Qty</th>
                     <th className="pb-2 font-semibold text-right">Subtotal</th>
                   </tr>
                 </thead>
-                <tbody className="divide-y divide-slate-850 print:divide-black">
+                <tbody className="divide-y divide-slate-100 print:divide-black">
                   {selectedChal.items?.map((item) => (
                     <tr key={item.id}>
                       <td className="py-2.5">
-                        <div className="font-semibold text-slate-200 print:text-black">{item.productNameSnapshot}</div>
-                        <div className="text-[9px] text-slate-500 font-mono print:text-slate-600">{item.skuSnapshot}</div>
+                        <div className="font-semibold text-slate-900 print:text-black">{item.productNameSnapshot}</div>
+                        <div className="text-[10px] text-slate-500 font-mono print:text-slate-600">{item.skuSnapshot}</div>
                       </td>
-                      <td className="py-2.5 text-right font-mono text-slate-400 print:text-black">${Number(item.unitPriceSnapshot).toFixed(2)}</td>
-                      <td className="py-2.5 text-right font-semibold text-slate-350 print:text-black">{item.quantity}</td>
-                      <td className="py-2.5 text-right font-bold text-slate-200 print:text-black">
+                      <td className="py-2.5 text-right font-mono text-slate-600 print:text-black">${Number(item.unitPriceSnapshot).toFixed(2)}</td>
+                      <td className="py-2.5 text-right font-semibold text-slate-700 print:text-black">{item.quantity}</td>
+                      <td className="py-2.5 text-right font-bold text-slate-900 print:text-black">
                         ${(Number(item.unitPriceSnapshot) * item.quantity).toFixed(2)}
                       </td>
                     </tr>
@@ -372,10 +372,10 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
                 </tbody>
               </table>
 
-              <div className="border-t border-slate-800 pt-4 space-y-1.5 text-xs text-right print:border-black">
-                <div className="text-slate-500">Total Quantity: <span className="font-semibold text-slate-300 print:text-black">{selectedChal.totalQuantity} units</span></div>
-                <div className="text-sm font-black text-white print:text-black">
-                  Estimated Total Value: <span className="text-emerald-400 print:text-black">
+              <div className="border-t border-slate-200 pt-4 space-y-1.5 text-sm text-right print:border-black">
+                <div className="text-slate-500">Total Quantity: <span className="font-semibold text-slate-700 print:text-black">{selectedChal.totalQuantity} units</span></div>
+                <div className="text-base font-black text-slate-900 print:text-black">
+                  Estimated Total Value: <span className="text-emerald-600 print:text-black">
                     ${selectedChal.items?.reduce((sum, item) => sum + (Number(item.unitPriceSnapshot) * item.quantity), 0).toFixed(2)}
                   </span>
                 </div>
@@ -383,13 +383,13 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
             </div>
 
             {/* Workflow state machine actions */}
-            <div className="p-6 border-t border-slate-800 bg-slate-950/20 space-y-3.5 print:hidden">
+            <div className="p-6 border-t border-slate-200 bg-slate-50/50 space-y-3.5 print:hidden">
               {selectedChal.status === 'DRAFT' && (
                 <div className="grid grid-cols-2 gap-3">
                   {isSalesOrAdmin && (
                     <button
                       onClick={() => handleUpdateStatus('CONFIRMED')}
-                      className="w-full flex items-center justify-center space-x-1.5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl text-xs shadow active:scale-[0.98] transition cursor-pointer"
+                      className="w-full flex items-center justify-center space-x-1.5 py-2.5 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white font-bold rounded-xl text-sm shadow active:scale-[0.98] transition cursor-pointer"
                     >
                       <FileCheck2 className="w-4 h-4" />
                       <span>Confirm Challan</span>
@@ -398,7 +398,7 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
                   {isAccountsOrAdmin && (
                     <button
                       onClick={() => handleUpdateStatus('CANCELLED')}
-                      className="w-full flex items-center justify-center space-x-1.5 py-2.5 bg-slate-900 border border-rose-900/60 hover:bg-rose-950/20 text-rose-400 font-bold rounded-xl text-xs transition cursor-pointer"
+                      className="w-full flex items-center justify-center space-x-1.5 py-2.5 bg-white border border-rose-200 hover:bg-rose-50 text-rose-600 font-bold rounded-xl text-sm transition cursor-pointer shadow-sm"
                     >
                       <FileX2 className="w-4 h-4" />
                       <span>Cancel Invoice</span>
@@ -410,7 +410,7 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
               {selectedChal.status === 'CONFIRMED' && isAccountsOrAdmin && (
                 <button
                   onClick={() => handleUpdateStatus('CANCELLED')}
-                  className="w-full flex items-center justify-center space-x-1.5 py-2.5 bg-slate-900 border border-rose-900/60 hover:bg-rose-950/20 text-rose-400 font-bold rounded-xl text-xs transition cursor-pointer"
+                  className="w-full flex items-center justify-center space-x-1.5 py-2.5 bg-white border border-rose-200 hover:bg-rose-50 text-rose-600 font-bold rounded-xl text-sm transition cursor-pointer shadow-sm"
                 >
                   <FileX2 className="w-4 h-4" />
                   <span>Cancel Invoice (Release Stock)</span>
@@ -418,7 +418,7 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
               )}
 
               {selectedChal.status === 'CANCELLED' && (
-                <div className="p-3 bg-rose-950/30 border border-rose-900/30 rounded-xl text-xs text-rose-400 italic text-center">
+                <div className="p-3 bg-rose-50/50 border border-rose-200 rounded-xl text-sm text-rose-600 italic text-center">
                   This challan is cancelled. Stock locks have been successfully released and audit entries compiled.
                 </div>
               )}
@@ -426,7 +426,7 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
 
           </div>
         ) : (
-          <div className="h-full flex items-center justify-center p-8 text-center text-xs text-slate-500">
+          <div className="h-full flex items-center justify-center p-8 text-center text-sm text-slate-500 bg-slate-50/50">
             Select a sales challan invoice from the ledger to inspect client billing, quantities, and stock confirmations.
           </div>
         )}
@@ -434,14 +434,14 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
 
       {/* CREATE CHALLAN WIZARD MODAL */}
       {showAddModal && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-          <div className="w-full max-w-2xl bg-slate-900 border border-slate-800 rounded-3xl shadow-2xl p-6 space-y-6 max-h-[90vh] overflow-y-auto">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-sm p-4">
+          <div className="w-full max-w-2xl bg-white border border-slate-200 rounded-3xl shadow-2xl p-6 space-y-6 max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
               <div>
-                <h3 className="font-extrabold text-lg text-white">Create Challan Wizard</h3>
-                <p className="text-xs text-slate-400 mt-0.5">Select a customer and build the transaction package</p>
+                <h3 className="font-extrabold text-lg text-slate-900">Create Challan Wizard</h3>
+                <p className="text-sm text-slate-500 mt-0.5">Select a customer and build the transaction package</p>
               </div>
-              <button onClick={() => setShowAddModal(false)} className="text-slate-500 hover:text-white transition cursor-pointer">
+              <button onClick={() => setShowAddModal(false)} className="text-slate-400 hover:text-slate-600 transition cursor-pointer">
                 <X className="w-5 h-5" />
               </button>
             </div>
@@ -450,12 +450,12 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
               
               {/* Customer Selector */}
               <div className="space-y-1">
-                <label className="text-[10px] font-bold text-slate-400 uppercase">Customer Consignee</label>
+                <label className="text-xs font-bold text-slate-500 uppercase">Customer Consignee</label>
                 <select
                   required
                   value={selectedCustomerId}
                   onChange={(e) => setSelectedCustomerId(e.target.value)}
-                  className="w-full px-3 py-2 bg-slate-950 border border-slate-850 hover:border-slate-750 focus:border-sky-500 focus:outline-none rounded-xl text-xs text-slate-300 transition"
+                  className="w-full px-3 py-2 bg-slate-50 border border-slate-200 hover:border-slate-300 focus:border-blue-500 focus:outline-none rounded-xl text-sm text-slate-700 transition"
                 >
                   <option value="">Select a Customer Lead or Distributor...</option>
                   {customers.map((c) => (
@@ -466,17 +466,17 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
                 </select>
               </div>
 
-              <div className="border-t border-slate-850 my-4"></div>
+              <div className="border-t border-slate-200 my-4"></div>
 
               {/* Items selection workspace */}
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end bg-slate-950/40 p-4 border border-slate-850 rounded-2xl">
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4 items-end bg-slate-50/50 p-4 border border-slate-200 rounded-2xl">
                 
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">Product Item</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase">Product Item</label>
                   <select
                     value={tempProductId}
                     onChange={(e) => setTempProductId(e.target.value)}
-                    className="w-full px-3 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 focus:border-sky-500 focus:outline-none rounded-xl text-xs text-slate-350 transition"
+                    className="w-full px-3 py-2 bg-white border border-slate-200 hover:border-slate-300 focus:border-blue-500 focus:outline-none rounded-xl text-sm text-slate-700 transition shadow-sm"
                   >
                     <option value="">Choose product...</option>
                     {products.map((p) => (
@@ -488,13 +488,13 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
                 </div>
 
                 <div className="space-y-1">
-                  <label className="text-[10px] font-bold text-slate-400 uppercase">Dispatch Quantity</label>
+                  <label className="text-xs font-bold text-slate-500 uppercase">Dispatch Quantity</label>
                   <input
                     type="number"
                     min="1"
                     value={tempQuantity}
                     onChange={(e) => setTempQuantity(Math.max(1, Number(e.target.value)))}
-                    className="w-full px-3 py-2 bg-slate-900 border border-slate-800 hover:border-slate-700 focus:border-sky-500 focus:outline-none rounded-xl text-xs text-slate-200 transition font-mono"
+                    className="w-full px-3 py-2 bg-white border border-slate-200 hover:border-slate-300 focus:border-blue-500 focus:outline-none rounded-xl text-sm text-slate-900 transition font-mono shadow-sm"
                   />
                 </div>
 
@@ -502,7 +502,7 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
                   type="button"
                   onClick={handleAddWizardItem}
                   disabled={!tempProductId}
-                  className="w-full py-2 bg-slate-800 hover:bg-slate-750 text-sky-400 font-bold rounded-xl text-xs transition disabled:opacity-50 cursor-pointer"
+                  className="w-full py-2 bg-slate-100 hover:bg-slate-200 text-blue-600 font-bold rounded-xl text-sm transition disabled:opacity-50 cursor-pointer border border-slate-200 shadow-sm"
                 >
                   Add to Challan list
                 </button>
@@ -510,16 +510,16 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
 
               {/* Live added items preview */}
               <div className="space-y-2">
-                <p className="text-[10px] text-slate-500 font-bold uppercase tracking-wider">Challan Items package</p>
+                <p className="text-xs text-slate-500 font-bold uppercase tracking-wider">Challan Items package</p>
                 {wizardItems.length === 0 ? (
-                  <div className="p-8 bg-slate-950/40 border border-slate-850 rounded-2xl text-center text-xs text-slate-500">
+                  <div className="p-8 bg-slate-50/50 border border-slate-200 rounded-2xl text-center text-sm text-slate-500">
                     No products added to package list yet. Select an item above.
                   </div>
                 ) : (
-                  <div className="bg-slate-950/40 border border-slate-850 rounded-2xl overflow-hidden">
-                    <table className="w-full text-left text-xs border-collapse">
+                  <div className="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm">
+                    <table className="w-full text-left text-sm border-collapse">
                       <thead>
-                        <tr className="bg-slate-950 text-slate-500 border-b border-slate-850/80">
+                        <tr className="bg-slate-50 text-slate-500 border-b border-slate-200">
                           <th className="p-3 font-semibold">Item & SKU</th>
                           <th className="p-3 font-semibold text-right">Price</th>
                           <th className="p-3 font-semibold text-right">Qty</th>
@@ -527,26 +527,26 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
                           <th className="p-3 text-center">Delete</th>
                         </tr>
                       </thead>
-                      <tbody className="divide-y divide-slate-850">
+                      <tbody className="divide-y divide-slate-100">
                         {wizardItems.map((item, idx) => {
                           const p = products.find(p => p.id === item.productId);
                           if (!p) return null;
                           return (
-                            <tr key={idx} className="hover:bg-slate-900/10">
+                            <tr key={idx} className="hover:bg-slate-50">
                               <td className="p-3">
-                                <div className="font-semibold text-slate-200">{p.name}</div>
-                                <div className="text-[9px] text-slate-500 font-mono mt-0.5">{p.sku}</div>
+                                <div className="font-semibold text-slate-900">{p.name}</div>
+                                <div className="text-[10px] text-slate-500 font-mono mt-0.5">{p.sku}</div>
                               </td>
-                              <td className="p-3 text-right font-mono text-slate-400">${Number(p.unitPrice).toFixed(2)}</td>
-                              <td className="p-3 text-right font-semibold text-slate-350">{item.quantity}</td>
-                              <td className="p-3 text-right font-bold text-slate-200">
+                              <td className="p-3 text-right font-mono text-slate-600">${Number(p.unitPrice).toFixed(2)}</td>
+                              <td className="p-3 text-right font-semibold text-slate-700">{item.quantity}</td>
+                              <td className="p-3 text-right font-bold text-slate-900">
                                 ${(Number(p.unitPrice) * item.quantity).toFixed(2)}
                               </td>
                               <td className="p-3 text-center">
                                 <button 
                                   type="button" 
                                   onClick={() => handleRemoveWizardItem(idx)}
-                                  className="text-slate-500 hover:text-rose-500 transition cursor-pointer"
+                                  className="text-slate-400 hover:text-rose-500 transition cursor-pointer"
                                 >
                                   <Trash2 className="w-4 h-4" />
                                 </button>
@@ -561,10 +561,10 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
               </div>
 
               {/* Wizard Totals */}
-              <div className="flex justify-between items-center text-xs p-4 bg-slate-950/60 rounded-2xl border border-slate-850">
-                <div className="text-slate-500">Total Items: <span className="font-bold text-slate-300">{wizardTotalQty} units</span></div>
-                <div className="font-black text-white">
-                  Estimated Invoice Value: <span className="text-emerald-400">${wizardTotalVal.toFixed(2)}</span>
+              <div className="flex justify-between items-center text-sm p-4 bg-slate-50/80 rounded-2xl border border-slate-200">
+                <div className="text-slate-500">Total Items: <span className="font-bold text-slate-700">{wizardTotalQty} units</span></div>
+                <div className="font-black text-slate-900">
+                  Estimated Invoice Value: <span className="text-emerald-600">${wizardTotalVal.toFixed(2)}</span>
                 </div>
               </div>
 
@@ -573,7 +573,7 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
                 <button
                   type="button"
                   onClick={() => setShowAddModal(false)}
-                  className="px-4 py-2 border border-slate-800 hover:bg-slate-800 text-slate-300 rounded-xl text-xs font-semibold transition cursor-pointer"
+                  className="px-4 py-2 border border-slate-200 hover:bg-slate-50 text-slate-600 rounded-xl text-sm font-semibold transition cursor-pointer"
                 >
                   Cancel
                 </button>
@@ -581,7 +581,7 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
                   type="button"
                   disabled={!selectedCustomerId || wizardItems.length === 0}
                   onClick={() => handleCreateChallan('DRAFT')}
-                  className="px-4 py-2 bg-slate-800 hover:bg-slate-700 border border-slate-700 text-amber-400 rounded-xl text-xs font-semibold transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                  className="px-4 py-2 bg-white hover:bg-slate-50 border border-slate-200 text-amber-600 rounded-xl text-sm font-semibold transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5 shadow-sm"
                 >
                   <span>💾</span> Save as Draft
                 </button>
@@ -589,7 +589,7 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
                   type="button"
                   disabled={!selectedCustomerId || wizardItems.length === 0}
                   onClick={() => handleCreateChallan('CONFIRMED')}
-                  className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-xs font-semibold shadow-lg shadow-emerald-900/20 active:scale-[0.98] transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
+                  className="px-4 py-2 bg-gradient-to-r from-emerald-600 to-teal-600 hover:from-emerald-500 hover:to-teal-500 text-white rounded-xl text-sm font-semibold shadow-md active:scale-[0.98] transition cursor-pointer disabled:opacity-50 flex items-center gap-1.5"
                 >
                   <span>✅</span> Confirm & Lock Stock
                 </button>

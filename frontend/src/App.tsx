@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react';
+import { Routes, Route, Navigate, useNavigate } from 'react-router-dom';
 import Auth from './components/Auth';
+import Landing from './components/Landing';
 import Navbar from './components/Navbar';
 import Dashboard from './components/Dashboard';
 import Customers from './components/Customers';
@@ -20,7 +22,8 @@ export default function App() {
     }
   });
   const [loading, setLoading] = useState(true);
-  const [tab, setTab] = useState('dashboard');
+  
+  const navigate = useNavigate();
 
   useEffect(() => {
     let isMounted = true;
@@ -42,7 +45,8 @@ export default function App() {
         const controller = new AbortController();
         const timeoutId = setTimeout(() => controller.abort(), 3000);
 
-        const response = await fetch('/api/auth/me', {
+        const baseUrl = import.meta.env.VITE_API_URL ? `${import.meta.env.VITE_API_URL}/api` : '/api';
+        const response = await fetch(`${baseUrl}/auth/me`, {
           headers: { Authorization: `Bearer ${storedToken}` },
           signal: controller.signal,
         });
@@ -80,6 +84,7 @@ export default function App() {
     const handleUnauthorized = () => {
       setToken(null);
       setUser(null);
+      navigate('/');
     };
     window.addEventListener('auth:unauthorized', handleUnauthorized);
 
@@ -87,14 +92,14 @@ export default function App() {
       isMounted = false;
       window.removeEventListener('auth:unauthorized', handleUnauthorized);
     };
-  }, []);
+  }, [navigate]);
 
   const handleLoginSuccess = (newToken: string, loggedInUser: User) => {
     localStorage.setItem('fundsroom_token', newToken);
     localStorage.setItem('fundsroom_user', JSON.stringify(loggedInUser));
     setToken(newToken);
     setUser(loggedInUser);
-    setTab('dashboard');
+    navigate('/dashboard');
   };
 
   const handleLogout = () => {
@@ -102,54 +107,56 @@ export default function App() {
     localStorage.removeItem('fundsroom_user');
     setToken(null);
     setUser(null);
+    navigate('/');
   };
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-slate-950 text-slate-100 flex flex-col items-center justify-center space-y-4">
-        <div className="w-10 h-10 border-4 border-sky-500 border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-xs text-slate-400 font-semibold tracking-wide">Loading Fundsroom ERP...</p>
+      <div className="min-h-screen bg-slate-50 text-slate-900 flex flex-col items-center justify-center space-y-4">
+        <div className="w-10 h-10 border-4 border-blue-500 border-t-transparent rounded-full animate-spin"></div>
+        <p className="text-base text-slate-600 font-semibold tracking-wide">Loading Fundsroom ERP...</p>
       </div>
     );
   }
 
+  // Handle unauthenticated routes
   if (!token || !user) {
-    return <Auth onLoginSuccess={handleLoginSuccess} />;
+    return (
+      <Routes>
+        <Route path="/login" element={<Auth onLoginSuccess={handleLoginSuccess} onBack={() => navigate('/')} />} />
+        <Route path="/" element={<Landing onGoToLogin={() => navigate('/login')} />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    );
   }
 
-  const renderTabContent = () => {
-    switch (tab) {
-      case 'dashboard':
-        return <Dashboard token={token} setTab={setTab} />;
-      case 'customers':
-        if (user.role === 'WAREHOUSE') {
-          return (
-            <div className="flex-1 p-8 bg-slate-950 flex items-center justify-center text-center">
-              <div className="max-w-md space-y-3 bg-slate-900 border border-slate-800 p-6 rounded-2xl">
-                <ShieldAlert className="w-12 h-12 text-rose-500 mx-auto" />
-                <h3 className="text-base font-bold text-white">Access Restricted</h3>
-                <p className="text-xs text-slate-400">Your role (WAREHOUSE) does not have permission to view Customer CRM profiles.</p>
-              </div>
-            </div>
-          );
-        }
-        return <Customers token={token} userRole={user.role} />;
-      case 'products':
-        return <Products token={token} userRole={user.role} />;
-      case 'challans':
-        return <Challans token={token} userRole={user.role} />;
-      default:
-        return <Dashboard token={token} setTab={setTab} />;
-    }
-  };
-
   return (
-    <div className="min-h-screen bg-slate-950 text-slate-100 flex overflow-hidden">
+    <div className="min-h-screen bg-slate-50 text-slate-900 flex overflow-hidden">
       {/* Sidebar Navigation */}
-      <Navbar user={user} currentTab={tab} setTab={setTab} onLogout={handleLogout} />
+      <Navbar user={user} onLogout={handleLogout} />
 
       {/* Primary Workspace View */}
-      {renderTabContent()}
+      <Routes>
+        <Route path="/dashboard" element={<Dashboard token={token} />} />
+        <Route path="/customers" element={
+          user.role === 'WAREHOUSE' ? (
+            <div className="flex-1 p-8 bg-slate-50 flex items-center justify-center text-center">
+              <div className="max-w-md space-y-3 bg-white border border-slate-200 p-6 rounded-2xl shadow-sm">
+                <ShieldAlert className="w-12 h-12 text-rose-500 mx-auto" />
+                <h3 className="text-lg font-bold text-slate-900">Access Restricted</h3>
+                <p className="text-base text-slate-500">Your role (WAREHOUSE) does not have permission to view Customer CRM profiles.</p>
+              </div>
+            </div>
+          ) : (
+            <Customers token={token} userRole={user.role} />
+          )
+        } />
+        <Route path="/products" element={<Products token={token} userRole={user.role} />} />
+        <Route path="/challans" element={<Challans token={token} userRole={user.role} />} />
+        
+        {/* Default route redirect */}
+        <Route path="*" element={<Navigate to="/dashboard" replace />} />
+      </Routes>
     </div>
   );
 }
