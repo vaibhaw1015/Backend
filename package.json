@@ -1,0 +1,21 @@
+{
+  "name": "fundsroom-erp-crm",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Wholesale ERP/CRM System monorepo containing backend (Express + Prisma) and frontend (React + Vite)",
+  "scripts": {
+    "setup": "npm run setup:backend && npm run setup:frontend",
+    "setup:backend": "cd backend && npm install",
+    "setup:frontend": "cd frontend && npm install",
+    "dev:backend": "cd backend && npm run dev",
+    "dev:frontend": "cd frontend && npm run dev",
+    "build:backend": "cd backend && npm run build",
+    "build:frontend": "cd frontend && npm run build",
+    "prisma:generate": "cd backend && npx prisma generate",
+    "prisma:migrate": "cd backend && npx prisma migrate dev",
+    "prisma:studio": "cd backend && npx prisma studio"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC"
+}
