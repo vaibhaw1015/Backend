@@ -169,3 +169,9 @@ An exportable Postman collection is included in the root directory:
    - Local: `http://localhost:5002/api`
    - Deployed: `https://your-backend-api.onrender.com/api`
 3. Execute `1. Authentication -> Login (Sales)` to retrieve your JWT `token`, paste it into `authToken`, and test all Customer, Inventory, and Challan endpoints.
+
+---
+
+## ⚠️ Known limitations / incomplete parts
+
+- **PDF Generation for Challans**: The core requirements for the challan system are fully implemented (creation, display, confirmation, cancellation, and stock deduction/restoration). The "Export invoice as PDF" feature listed under Bonus Points has been skipped due to time constraints, as advised. The challans are currently viewable on the screen but cannot be downloaded as PDF files.
