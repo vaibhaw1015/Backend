@@ -6,10 +6,5 @@ export default defineConfig({
     environment: 'node',
     setupFiles: ['./tests/setup.ts'],
     fileParallelism: false, // Prevent DB race conditions
-    poolOptions: {
-      threads: {
-        singleThread: true,
-      },
-    },
   },
 });
