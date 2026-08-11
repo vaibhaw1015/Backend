@@ -16,6 +16,79 @@ A production-ready, full-stack **Wholesale & Distribution ERP / CRM System** bui
 
 ---
 
+## 🚀 CI/CD Architecture
+
+This project is configured with an enterprise-grade Continuous Integration and Continuous Deployment (CI/CD) pipeline using **GitHub Actions**.
+
+### Workflow Architecture
+```mermaid
+graph TD
+    A[Developer Pushes Code] --> B[GitHub Pull Request]
+    B --> C[GitHub Actions Triggered]
+    
+    subgraph CI Pipeline
+    C --> D[Frontend CI]
+    C --> E[Backend CI]
+    
+    D --> D1(Install Deps)
+    D1 --> D2(Type Check)
+    D2 --> D3(Vitest Tests)
+    D3 --> D4(Vite Build)
+    
+    E --> E1(Install Deps)
+    E1 --> E2(Start Test Postgres DB)
+    E2 --> E3(Prisma Generate)
+    E3 --> E4(Type Check)
+    E4 --> E5(Vitest Integration Tests)
+    E5 --> E6(Node Build)
+    end
+    
+    D4 --> F{All CI Checks Pass?}
+    E6 --> F
+    
+    F -- Yes --> G[Merge to Main]
+    G --> H[Production Deployment Job]
+    H --> I[Trigger Render Webhook]
+    H --> J[Trigger Vercel Webhook]
+    I --> K[Live Backend]
+    J --> L[Live Frontend]
+```
+
+### Automated Testing
+- **Backend Tests:** Built with `vitest` and `supertest`. A clean PostgreSQL container is spun up in CI specifically for testing to ensure the production database is never touched by tests. Tests cover Authentication, CRM logic, and strict Stock/Challan business logic.
+- **Frontend Tests:** Built with `vitest`, `jsdom`, and `@testing-library/react`.
+
+### Local Testing Commands
+If you want to run the automated tests on your own machine before pushing:
+
+**Frontend:**
+```bash
+cd frontend
+npm ci
+npm run typecheck
+npm run test
+npm run build
+```
+
+**Backend:**
+> Note: You will need a local postgres database running to run backend tests locally without Docker. Make sure to update your `backend/.env.test` with your local test database URL.
+```bash
+cd backend
+npm ci
+npm run prisma:generate
+npm run typecheck
+npm run test
+npm run build
+```
+
+### GitHub Secrets
+To fully enable the Continuous Deployment (CD) pipeline, you must configure the following secrets in your GitHub Repository settings (`Settings > Secrets and variables > Actions`):
+- `RENDER_DEPLOY_HOOK`: The webhook URL provided by Render to trigger a backend deploy.
+- `VERCEL_DEPLOY_HOOK`: The webhook URL provided by Vercel to trigger a frontend deploy.
+*(Note: If Vercel/Render are already connected to your GitHub repo, they may auto-deploy. To enforce "Deploy only if tests pass", disable auto-deploy on their platforms and rely strictly on these webhook secrets in GitHub Actions).*
+
+---
+
 ## 🔑 Test Credentials (Demo Accounts)
 All accounts share the password: **`Password123`**
 
