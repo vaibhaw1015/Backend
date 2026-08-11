@@ -84,13 +84,18 @@ cd backend
 npm install
 ```
 
-Configure `backend/.env`:
+Configure `backend/.env` (copy from the provided template):
+```bash
+cp .env.example .env
+# Then edit .env with your actual credentials:
+```
 ```env
 PORT=5002
-DATABASE_URL="postgresql://neondb_owner:npg_fLYP2ZFDBd6Q@ep-broad-scene-azmop5qt.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require"
-JWT_SECRET="fundsroom-jwt-3f48a1dbe2b75a1c0d48ff99c4d96a782b1c4e97"
+DATABASE_URL="postgresql://<user>:<password>@<host>/<database>?sslmode=require"
+JWT_SECRET="<your-secret-key>"
 NODE_ENV="development"
 ```
+> **Note:** Never commit `.env` to version control. A `.env.example` template is provided in the repo.
 
 Seed database with test users, products, and sample challans:
 ```bash
@@ -145,9 +150,10 @@ docker-compose up --build
 5. Start Command: `node dist/index.js`
 6. Environment Variables to add:
    - `PORT` = `5002` (or `$PORT`)
-   - `DATABASE_URL` = `postgresql://neondb_owner:npg_fLYP2ZFDBd6Q@ep-broad-scene-azmop5qt.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require`
-   - `JWT_SECRET` = `fundsroom-jwt-3f48a1dbe2b75a1c0d48ff99c4d96a782b1c4e97`
+   - `DATABASE_URL` = `<your-neon-postgresql-connection-string>`
+   - `JWT_SECRET` = `<your-jwt-secret>`
    - `NODE_ENV` = `production`
+   > ⚠️ **Do not paste real credentials into README.** Add them directly in the Render/Railway dashboard UI.
 7. Click **Deploy Web Service**. Render/Railway will output your live API demo link!
 
 ---

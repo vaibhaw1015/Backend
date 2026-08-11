@@ -8,11 +8,11 @@ services:
     container_name: fundsroom-backend
     ports:
       - "5002:5002"
+    env_file:
+      - ./backend/.env
     environment:
       - PORT=5002
       - NODE_ENV=production
-      - DATABASE_URL=postgresql://neondb_owner:npg_fLYP2ZFDBd6Q@ep-broad-scene-azmop5qt.c-3.ap-southeast-1.aws.neon.tech/neondb?sslmode=require
-      - JWT_SECRET=fundsroom-jwt-3f48a1dbe2b75a1c0d48ff99c4d96a782b1c4e97
     restart: always
 
   frontend:
