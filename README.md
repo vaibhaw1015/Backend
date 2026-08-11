@@ -247,4 +247,4 @@ An exportable Postman collection is included in the root directory:
 
 ## ⚠️ Known limitations / incomplete parts
 
-- **PDF Generation for Challans**: The core requirements for the challan system are fully implemented (creation, display, confirmation, cancellation, and stock deduction/restoration). The "Export invoice as PDF" feature listed under Bonus Points has been skipped due to time constraints, as advised. The challans are currently viewable on the screen but cannot be downloaded as PDF files.
+- **PDF Generation for Challans**: The "Export invoice as PDF" feature has now been successfully integrated! You can view any challan on the screen and click the "PDF" download icon next to the "Print" button to instantly generate and download a beautifully formatted PDF version of the distribution invoice.

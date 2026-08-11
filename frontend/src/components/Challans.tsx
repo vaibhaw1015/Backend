@@ -7,10 +7,13 @@ import {
   FileCheck2, 
   FileX2, 
   Printer, 
+  Download,
   X 
 } from 'lucide-react';
 import { Challan, Customer, Product, Role } from '../types';
 import api from '../api';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
 
 interface ChallansProps {
   token: string;
@@ -172,6 +175,33 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
     window.print();
   };
 
+  const handleExportPDF = async () => {
+    const element = document.getElementById('printable-challan');
+    if (!element) return;
+    
+    // Temporarily hide action buttons so they don't appear in PDF
+    const actionDiv = document.getElementById('challan-actions');
+    if (actionDiv) actionDiv.style.display = 'none';
+
+    try {
+      const canvas = await html2canvas(element, { scale: 2, useCORS: true });
+      const imgData = canvas.toDataURL('image/png');
+      
+      const pdf = new jsPDF('p', 'mm', 'a4');
+      const pdfWidth = pdf.internal.pageSize.getWidth();
+      const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+      
+      pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+      pdf.save(`Challan_${selectedChal?.challanNumber || 'Invoice'}.pdf`);
+    } catch (error) {
+      console.error('Failed to generate PDF:', error);
+      alert('Failed to generate PDF. Please try again.');
+    } finally {
+      // Restore action buttons
+      if (actionDiv) actionDiv.style.display = 'block';
+    }
+  };
+
   // Helper status styling
   const statusBadgeStyle = (status: string) => {
     switch (status) {
@@ -304,7 +334,14 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
                   {selectedChal.status}
                 </span>
 
-                <div className="flex items-center space-x-1">
+                <div className="flex items-center space-x-2">
+                  <button 
+                    onClick={handleExportPDF}
+                    className="p-1.5 hover:bg-slate-50 border border-slate-200 text-slate-500 hover:text-blue-600 rounded-lg transition cursor-pointer flex items-center space-x-1"
+                  >
+                    <Download className="w-3.5 h-3.5" />
+                    <span className="text-[10px] font-bold">PDF</span>
+                  </button>
                   <button 
                     onClick={handlePrint}
                     className="p-1.5 hover:bg-slate-50 border border-slate-200 text-slate-500 hover:text-slate-700 rounded-lg transition cursor-pointer flex items-center space-x-1"
@@ -383,7 +420,7 @@ export default function Challans({ token: _token, userRole }: ChallansProps) {
             </div>
 
             {/* Workflow state machine actions */}
-            <div className="p-6 border-t border-slate-200 bg-slate-50/50 space-y-3.5 print:hidden">
+            <div id="challan-actions" className="p-6 border-t border-slate-200 bg-slate-50/50 space-y-3.5 print:hidden">
               {selectedChal.status === 'DRAFT' && (
                 <div className="grid grid-cols-2 gap-3">
                   {isSalesOrAdmin && (
