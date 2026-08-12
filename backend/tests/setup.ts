@@ -26,8 +26,8 @@ beforeAll(() => {
   }
 });
 
-beforeEach(async () => {
-  // Truncate tables before each test for isolation
+beforeAll(async () => {
+  // Truncate tables before ALL tests in this file for isolation
   const tablenames = await prisma.$queryRaw<Array<{ tablename: string }>>`
     SELECT tablename FROM pg_tables WHERE schemaname='public'
   `;

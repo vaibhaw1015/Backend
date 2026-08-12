@@ -48,7 +48,7 @@ describe('Auth API', () => {
       });
 
     expect(res.status).toBe(401);
-    expect(res.body.error).toBe('Invalid credentials');
+    expect(res.body.error).toBe('Unauthorized');
   });
 
   it('should fetch current user profile with valid token', async () => {
