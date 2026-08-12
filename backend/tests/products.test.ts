@@ -64,7 +64,7 @@ describe('Products API', () => {
       .set('Authorization', `Bearer ${adminToken}`);
 
     expect(res.status).toBe(200);
-    expect(res.body.length).toBeGreaterThan(0);
-    expect(res.body[0].sku).toBeDefined();
+    expect(res.body.data.length).toBeGreaterThan(0);
+    expect(res.body.data[0].sku).toBeDefined();
   });
 });
