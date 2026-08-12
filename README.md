@@ -2,6 +2,8 @@
 
 A production-ready, full-stack **Wholesale & Distribution ERP / CRM System** built with **Node.js, Express, TypeScript, Prisma ORM, PostgreSQL**, and **React (Vite + Tailwind CSS)**.
 
+> 🌟 **[Click here to view the Live Demo Guide & Evaluator Walkthrough](./DEMO_GUIDE.md)** for live application links, test credentials, and a step-by-step feature showcase!
+
 ---
 
 ## 🌐 Live Demo & Deployment Links
